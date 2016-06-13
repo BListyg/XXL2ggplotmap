@@ -1,23 +1,24 @@
 #########################
 
-#Packages and stuff
+#loading packages
 library(rvest)
 library(reshape2)
 library(ggmap)
 
-#Linking to the the voting website for all the nominees also GO VOTE FOR PLAYBOI CARTI HE AINT A BROKE BOI
+#Linking to the the voting website for all the nominees
 links = read_html("http://freshmen.xxlmag.com/10th-spot/")
 
 link = links %>% 
-  #HTML Node (I think that's the right term? I don't know, I'm not a web comp sci person)
+  #specifying the HTML Node
   html_nodes(".desc2") %>% 
   html_text()
 link = melt(link)
 link = table(link)
 link = melt(link)
+#adding on the longitude and latitude to the rapper's name and where they're from
 link = cbind(geocode(as.character(link$link)),link)
 
-#Naming the columns of the rapper's city and how many come from there so it's pretty
+#Naming the columns of the rapper's city and how many come from there so there isn't any column confusion
 colnames(link)[3] = paste("RapperArea")
 colnames(link)[4] = paste("RapperCount")
 
